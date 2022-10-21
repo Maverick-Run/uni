@@ -70,6 +70,7 @@ public class MyTLSFileServer {
                 break;
             }
             System.out.println(in);
+            writer.println("Hello!");
             writer.write("Hello");
             writer.flush();
         }
