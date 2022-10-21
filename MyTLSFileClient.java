@@ -33,10 +33,7 @@ public class MyTLSFileClient {
 
         read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         write = new PrintWriter(socket.getOutputStream(), true);
-        write.print(file + "\r\n");
-        write.flush();
-        write.println("Hello!");
-        write.write("Hello");
+        write.println(file);
         write.flush();
         while (true){
             String in = read.readLine();
