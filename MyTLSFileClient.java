@@ -9,6 +9,7 @@ import javax.net.*;
 public class MyTLSFileClient {
     private static BufferedReader read;
     private static PrintWriter write;
+    private static OutputStream fileOut;
     public static void main(String[] args){
         if (args.length != 3){
             System.out.println("Usage: java MyTLSFileClient <host> <port> <file>");
@@ -30,17 +31,20 @@ public class MyTLSFileClient {
         * at this point, can getInputStream and
         * getOutputStream as you would a regular Socket
         */
-
+        InputStream inputStream = socket.getInputStream();
         read = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         write = new PrintWriter(socket.getOutputStream(), true);
+        
         write.println(file);
         write.flush();
-        while (true){
-            String in = read.readLine();
-            if (in == null ){break;}
-            System.out.println(in);
+
+        fileOut = new FileOutputStream("_" + file);
+        int count;
+        byte[] buffer = new byte[1024];
+        while ((count=inputStream.read(buffer))>0){
+            fileOut.write(buffer);
         }
-            
+
         } catch (UnknownHostException e) {
             // TODO: handle exception
             e.printStackTrace();
