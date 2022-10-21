@@ -63,22 +63,30 @@ public class MyTLSFileServer {
             e1.printStackTrace();
         }
         PrintWriter writer = new PrintWriter(clientOutput);
+        String filename = null;
         try {
-        while (true){
-            String in = reader.readLine();
-            if (in == null){
-                break;
-            }
-            System.out.println(in);
-            writer.println(
-                "You Said: " + in
-            );
-            writer.flush();
+            filename = reader.readLine();
+            System.out.println("Sending File: " + filename);
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
         }
-        }catch (Exception e) {
-            System.out.println("Failed on the loop");
+        BufferedInputStream fileInput = null;
+        try {
+            fileInput = new BufferedInputStream(new FileInputStream(filename));
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
-            System.out.println(e);
+        }
+        int count = 0;
+        byte[] buffer = new byte[1024];
+        try {
+            while((count = fileInput.read(buffer))>0){
+                clientOutput.write(buffer, 0, count);
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
